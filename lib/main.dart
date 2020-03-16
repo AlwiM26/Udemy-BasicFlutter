@@ -3,14 +3,25 @@ import 'package:flutter/material.dart';
 void main() => runApp(MyApp());
 
 //  Root Widget
-class MyApp extends StatelessWidget {
+//  Change the statelesswidget superclass with statefulwidget so we can change any value of a widget 
+class MyApp extends StatefulWidget {
   @override
-  Widget build(BuildContext c) {
-    //  List of questions with type of String
-    List<String> questions = [
-      'What\'s your favorite color? ',
-      'What\'s your favorite music genre ? ',
-    ];
+  //  Create State for MyApp class
+  State<StatefulWidget> createState() => MyAppState();
+}
+
+//  State Widget for MyApp Widget
+//  State is used to store all the data that'll be changed
+class MyAppState extends State<MyApp>{
+  //  List of questions with type of String
+  List<String> questions = [
+    'What\'s your favorite color? ',
+    'What\'s your favorite music genre ? ',
+  ];
+  int questionIndex = 0;
+
+  @override
+  Widget build(BuildContext c) {    
     return MaterialApp(
       title: 'My App',
       home: Scaffold(
@@ -21,7 +32,7 @@ class MyApp extends StatelessWidget {
         body: Column(
           //  Put all the widget that we want inside the angle bracket '[]'
           children: [
-            Text(questions[0]),
+            Text(questions[questionIndex]),
             RaisedButton(
               //  On a button, onPressed property takes a void type function as a arguments
               onPressed: answerQuestion,
@@ -45,6 +56,11 @@ class MyApp extends StatelessWidget {
   }
 
   void answerQuestion() {
-    print('Question 1 is answered!');
+    //  When button is pressed, the text will not be change at the exact time
+    //  So we have to wrap the change questionIndex inside of setState function to change the value
+    //  setState force flutter to re render the apps to change the value
+    setState(() {
+      questionIndex += 1;
+    });
   }
 }
