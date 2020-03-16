@@ -10,7 +10,6 @@ class MyApp extends StatelessWidget {
     List<String> questions = [
       'What\'s your favorite color? ',
       'What\'s your favorite music genre ? ',
-      'What\'s your favorit movie genre ? '
     ];
     return MaterialApp(
       title: 'My App',
@@ -24,24 +23,28 @@ class MyApp extends StatelessWidget {
           children: [
             Text(questions[0]),
             RaisedButton(
-              onPressed: null,
+              //  On a button, onPressed property takes a void type function as a arguments
+              onPressed: answerQuestion,
               child: Text("Answer 1"),
             ),
             RaisedButton(
-              onPressed: null,
+              //  We also can add inline function on the onpress property
+              onPressed: () => print("Question 2 is answered!"),
               child: Text("Answer 2"),
             ),
             RaisedButton(
-              onPressed: null,
+              onPressed: () {
+                print("Question 3 is Answered!");
+              },
               child: Text("Answer 3"),
-            ),
-            RaisedButton(
-              onPressed: null,
-              child: Text("Answer 4"),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void answerQuestion() {
+    print('Question 1 is answered!');
   }
 }
