@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 //  Importing Question.dart file to access the properties
-import './question.dart';
+import './quiz.dart';
+import './result.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,12 +18,30 @@ class MyApp extends StatefulWidget {
 //  State is used to store all the data that'll be changed
 //  Adding _ underscore in variabel or an class will make the class or variabel become private
 class _MyAppState extends State<MyApp> {
-  //  List of questions with type of String
-  List<String> questions = [
-    'What\'s your favorite color? ',
-    'What\'s your favorite music genre ? ',
+  //  Maps (called dictionary on another programming language) consisted of key and value
+  //  Now the _questions list is a list of maps
+  final _questions = [
+    {
+      'question': 'What\'s your favorite color? ',
+      'answers': [
+        {'text': 'Black', 'score': 4},
+        {'text': 'Green', 'score': 3},
+        {'text': 'Blue', 'score': 2},
+        {'text': 'Pink', 'score': 1},
+      ],
+    },
+    {
+      'question': 'What\'s your favorite music genre ? ',
+      'answers': [
+        {'text': 'Metal', 'score': 4},
+        {'text': 'Punk', 'score': 3},
+        {'text': 'Jazz', 'score': 2},
+        {'text': 'Pop', 'score': 1},
+      ],
+    },
   ];
   int questionIndex = 0;
+  int totalScore = 0;
 
   @override
   Widget build(BuildContext c) {
@@ -33,38 +52,31 @@ class _MyAppState extends State<MyApp> {
           title: Text('My First Apps'),
         ),
         //  Column just is a vertical layout, so we can have a multiple widget inside of the body property
-        body: Column(
-          //  Put all the widget that we want inside the square bracket '[]'
-          children: [
-            Question(
-              questions[questionIndex],
-            ),
-            RaisedButton(
-              //  On a button, onPressed property takes a void type function as a arguments
-              onPressed: answerQuestion,
-              child: Text("Answer 1"),
-            ),
-            RaisedButton(
-              //  We also can add inline function on the onpress property
-              onPressed: () => print("Question 2 is answered!"),
-              child: Text("Answer 2"),
-            ),
-            RaisedButton(
-              onPressed: () {
-                print("Question 3 is Answered!");
-              },
-              child: Text("Answer 3"),
-            ),
-          ],
-        ),
+        body: questionIndex < _questions.length
+            ? Quiz(
+                answerHandler: _answerQuestion,
+                questionIndex: questionIndex,
+                questions: _questions,
+              )
+            : Result(totalScore, _resetQuiz,)
       ),
     );
   }
 
-  void answerQuestion() {
+  void _answerQuestion(int score) {
     //  When button is pressed, the text will not be change at the exact time
     //  So we have to wrap the change questionIndex inside of setState function to change the value
     //  setState force flutter to re render the apps to change the value
-    setState(() => 1);
+    setState(() {
+      questionIndex += 1;
+      totalScore += score;
+    });
+  }
+
+  void _resetQuiz(){
+    setState(() {
+      questionIndex = 0;
+      totalScore = 0;      
+    });
   }
 }
